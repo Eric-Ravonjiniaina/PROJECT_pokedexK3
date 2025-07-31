@@ -3,7 +3,7 @@ import './App.css'
 import SectionCard from './components/sectionPokemonCard'
 
   function App() {
-    retrun (
+    return (
       <>
       <SectionCard />
       </>
