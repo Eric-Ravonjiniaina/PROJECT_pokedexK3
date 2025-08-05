@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 function Nav({onSearchResult}) {
     const [searchTerm, setSearchTerm] = useState("");
     const [pokemons, setPokemons] = useState([]);
+    const [filteredPokemons, setFilteredPokemons] = useState([]);
 
     const handleSearch = (event) => {
         setSearchTerm(event.target.value.toLowerCase());}
@@ -13,15 +14,20 @@ function Nav({onSearchResult}) {
             .then(data => setPokemons(data.results));
     }, []);
 
-    const filteredPokemons = searchTerm
-    ? pokemons.filter(pokemon => pokemon.name.includes(searchTerm))
-    : [];
+    useEffect(() => {
+            setFilteredPokemons(searchTerm
+            ? pokemons.filter(pokemon => pokemon.name.includes(searchTerm))
+            : []);
+    },[searchTerm])
+
 
     useEffect(() => {
-        if (onSearchResult) {
+        if (filteredPokemons) {
             onSearchResult(filteredPokemons);
+            console.log(filteredPokemons);
+                        
         }
-    }, [filteredPokemons, onSearchResult]);
+    }, [filteredPokemons]);
 
     return (
         <nav className="flex justify-between items-center p-4 bg-blue-500 text-white">
