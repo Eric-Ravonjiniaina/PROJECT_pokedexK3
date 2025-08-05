@@ -16,7 +16,7 @@ function Nav({onSearchResult,isSearchTerm}) {
 
     useEffect(() => {
             setFilteredPokemons(searchTerm
-            ? pokemons.filter(pokemon => pokemon.name.includes(searchTerm))
+            ? pokemons.filter(pokemon => pokemon.name.includes(searchTerm.trim()))
             : []);
     },[searchTerm])
 
@@ -24,7 +24,7 @@ function Nav({onSearchResult,isSearchTerm}) {
     useEffect(() => {
         if (filteredPokemons) {
             onSearchResult(filteredPokemons);
-            isSearchTerm(searchTerm !== "");
+            isSearchTerm(searchTerm.trim() !== "");
         }
     }, [filteredPokemons]);
 
