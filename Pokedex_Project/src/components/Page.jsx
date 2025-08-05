@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Page({pokemonsList}) {
-    if (!pokemonsList) {
+function Page({pokemonsList,isSearchTerm}) {
+    if (!isSearchTerm) {
         const [pokemons, setPokemons] = useState([]);
         const [page, setPage] = useState(0);
 
@@ -38,8 +38,8 @@ function Page({pokemonsList}) {
     }
     else{
         return(
-            <div className="flex flex-wrap justify-center gap-10 px-5 py-10">
-                {pokemonsList.map(pokemon =>(
+            <div className="flex flex-wrap justify-center gap-10 px-5 py-10 min-h-screen">
+                {pokemonsList  !=null  && pokemonsList.map(pokemon =>(
                     <Card key={pokemon.name} pokemonname={pokemon}/>
                 ))}
             </div>

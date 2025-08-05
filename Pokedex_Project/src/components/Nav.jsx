@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function Nav({onSearchResult}) {
+function Nav({onSearchResult,isSearchTerm}) {
     const [searchTerm, setSearchTerm] = useState("");
     const [pokemons, setPokemons] = useState([]);
     const [filteredPokemons, setFilteredPokemons] = useState([]);
@@ -24,8 +24,7 @@ function Nav({onSearchResult}) {
     useEffect(() => {
         if (filteredPokemons) {
             onSearchResult(filteredPokemons);
-            console.log(filteredPokemons);
-                        
+            isSearchTerm(searchTerm !== "");
         }
     }, [filteredPokemons]);
 
