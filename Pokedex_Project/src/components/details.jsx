@@ -1,8 +1,38 @@
 import { useEffect, useState } from "react";
 import './css/Card.css';
 
-function Details({ pokemonUrl }) {
+function Details({ pokemonUrl ,onClose}) {
   const [pokemonDetails, setPokemonDetails] = useState(null);
+  const [evolutionChain, setEvolutionChain] = useState([]);
+
+  useEffect(() => {
+  if (!pokemonUrl) return;
+
+  fetch(pokemonUrl)
+    .then(response => response.json())
+    .then(data => {
+      setPokemonDetails(data);
+
+      return fetch(data.species.url);
+    })
+    .then(res => res.json())
+    .then(speciesData => {
+      return fetch(speciesData.evolution_chain.url);
+    })
+    .then(res => res.json())
+    .then(evolutionData => {
+      const chain = [];
+      let current = evolutionData.chain;
+
+      while (current) {
+        chain.push(current.species.name);
+        current = current.evolves_to[0];
+      }
+
+      setEvolutionChain(chain);
+    });
+}, [pokemonUrl]);
+
 
   useEffect(() => {
     fetch(pokemonUrl)
@@ -18,6 +48,11 @@ function Details({ pokemonUrl }) {
 
   return (
     <div className="w-1/2 mx-auto mt-10 bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
+        <button
+        onClick={onClose}
+        className="relative bg-yellow-250 text-black px-4 py-2 rounded">
+        {"< Back"}
+      </button>
       <div className="md:w-1/2 bg-gradient-to-b from-yellow-100 to-yellow-200 flex flex-col items-center justify-center p-6">
         <h1 className="font-bold text-4xl capitalize mb-4 text-gray-800">
           {pokemonDetails.name}
@@ -63,6 +98,21 @@ function Details({ pokemonUrl }) {
           ))}
         </div>
       </div>
+      <div className="md:w-1/2 p-6 bg-yellow-100 flex flex-col">
+        <h2 className="text-2xl font-bold text-gray-700 mb-4">Évolution</h2>
+        <div className="space-y-3 flex flex-col items-center">
+            {evolutionChain.map((name, index) => (
+            <div key={index} className="flex items-center gap-4">
+                <img
+                src={`https://img.pokemondb.net/sprites/home/normal/${name}.png`}
+                alt={name}
+                className="w-16 h-16"
+                />
+                <span className="capitalize font-medium">{name}</span>
+            </div>
+            ))}
+        </div>
+        </div>
     </div>
   );
 }
