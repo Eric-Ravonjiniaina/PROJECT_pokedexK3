@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './css/Card.css';
 
-function Card({pokemonname}) {
+function Card({pokemonname, sendUrl}) {
     const path = pokemonname?.url;
     
     const [pokemon, setPokemon] = useState({});
@@ -14,7 +14,8 @@ function Card({pokemonname}) {
     },[path])
     return (
         <div className="flex flex-col items-center h-2/3 w-1/4 shadow-xl 
-        rounded-3xl bg-white p-5 hover:bg-gray-300 transition-all duration-200">
+        rounded-3xl bg-white p-5 hover:bg-gray-300 transition-all duration-200"
+        onClick={() => sendUrl(`https://pokeapi.co/api/v2/pokemon/${pokemon.id}`)}>
             <div className="text-start">#{pokemon.id}</div>
             <div className="text-2xl font-bold capitalize">{pokemonname.name}</div>
             <div className="p-5">

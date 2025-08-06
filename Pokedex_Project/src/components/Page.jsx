@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import Card from "./Card";
 
-function Page({pokemonsList,isSearchTerm}) {
-    if (!isSearchTerm) {
-        const [pokemons, setPokemons] = useState([]);
-        const [page, setPage] = useState(0);
+function Page({pokemonsList,isSearchTerm, sendUrl}) {
+    const [detailsUrl, setDetailsUrl] = useState("");
+    const [pokemons, setPokemons] = useState([]);
+    const [page, setPage] = useState(0);
+    
+    useEffect(() => {
+        if (sendUrl) {
+            sendUrl(detailsUrl);
+        }
+    }, [detailsUrl]);
 
         useEffect(() => {
             const offset = page * 15;
@@ -13,10 +19,11 @@ function Page({pokemonsList,isSearchTerm}) {
             .then(response => response.json())
             .then(data => setPokemons(data.results))
         },[page]);
+    if (!isSearchTerm) {
         return (
             <div className="flex flex-wrap justify-center gap-10 px-5 py-10">
                 {pokemons.map(pokemon =>(
-                    <Card key={pokemon.name} pokemonname={pokemon}/>
+                    <Card key={pokemon.name} pokemonname={pokemon} sendUrl={setDetailsUrl}/>
                 ))}
                 <div className="flex justify-between w-full mt-5">
                     <button 
@@ -40,7 +47,7 @@ function Page({pokemonsList,isSearchTerm}) {
         return(
             <div className="flex flex-wrap justify-center gap-10 px-5 py-10 min-h-screen">
                 {pokemonsList  !=null  && pokemonsList.map(pokemon =>(
-                    <Card key={pokemon.name} pokemonname={pokemon}/>
+                    <Card key={pokemon.name} pokemonname={pokemon} sendUrl={setDetailsUrl}/>
                 ))}
             </div>
         )
